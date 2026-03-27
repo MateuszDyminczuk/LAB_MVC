@@ -1,3 +1,16 @@
+# === Visual Studio & .NET Essentials ===
+[Bb]in/
+[Oo]bj/
+.vs/
+*.user
+*.userosscache
+*.sln.docconfigurations
+*.suo
+*.vstoken
+*.vsext
+
+# Te pliki powodowały Twój błąd "Permission denied":
+.vs/MvcMovie/v17/FileContentIndex/
 # Byte-compiled / optimized / DLL files
 __pycache__/
 *.py[codz]
