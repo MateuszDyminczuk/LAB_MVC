@@ -1,0 +1,12 @@
+
+.field-numer_inwentarzowy {
+    width: 100px !important;
+    min-width: 100px !important;
+    max-width: 120px !important;
+    white-space: nowrap;
+}
+
+
+.column-numer_inwentarzowy div.text a {
+    width: 100px !important;
+}
