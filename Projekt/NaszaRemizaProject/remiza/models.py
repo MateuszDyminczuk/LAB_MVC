@@ -38,10 +38,29 @@ class Strazak(models.Model):
     def __str__(self):
         return f"{self.imie} {self.nazwisko}"
     
+    def suma_godzin(self):
+        from datetime import timedelta, date
+        
+        obecny_rok = date.today().year
+        
+        akcje = self.udzial_w_akcjach.filter(data_godzina_wyjazdu__year=obecny_rok)
+        
+        laczny_czas = timedelta()
+
+        for akcja in akcje:
+            if akcja.data_godzina_powrotu and akcja.data_godzina_wyjazdu:
+                laczny_czas += akcja.data_godzina_powrotu - akcja.data_godzina_wyjazdu
+        
+        sekundy = laczny_czas.total_seconds()
+        godziny = int(sekundy // 3600)
+        minuty = int((sekundy % 3600) // 60)
+        
+        return f"{godziny}h {minuty}min (w {obecny_rok}r.)"
+    
 class Pojazd(models.Model):
-    nazwa = models.CharField(max_length=50) # np. Star 266, Jelcz
-    oznaczenie = models.CharField(max_length=20) # np. GBA 2.5/16
-    numer_operacyjny = models.CharField(max_length=20, unique=True) # np. 301[P]21
+    nazwa = models.CharField(max_length=50) 
+    oznaczenie = models.CharField(max_length=20) 
+    numer_operacyjny = models.CharField(max_length=20, unique=True) 
     sprawny = models.BooleanField(default=True)
 
     class Meta:
@@ -50,6 +69,11 @@ class Pojazd(models.Model):
 
     def __str__(self):
         return f"{self.numer_operacyjny} - {self.nazwa}"
+    
+    def liczba_wyjazdow_rok(self):
+        from datetime import date
+        obecny_rok = date.today().year
+        return self.akcja_set.filter(data_godzina_wyjazdu__year=obecny_rok).count()
     
 class Akcja(models.Model):
     RODZAJE = [
@@ -66,6 +90,7 @@ class Akcja(models.Model):
     miejsce = models.CharField(max_length=200)
     data_godzina_wyjazdu = models.DateTimeField()
     opis = models.TextField(blank=True)
+    data_godzina_powrotu = models.DateTimeField(null=True, blank=True)
     
     dowodca = models.ForeignKey(Strazak, on_delete=models.SET_NULL, null=True, related_name='prowadzone_akcje')
     pojazd = models.ForeignKey(Pojazd, on_delete=models.SET_NULL, null=True, verbose_name="Pojazd")
@@ -77,5 +102,13 @@ class Akcja(models.Model):
 
     def __str__(self):
         return f"Akcja {self.numer_zdarzenia} - {self.miejsce}"
+    
+    def czas_trwania(self):
+        if self.data_godzina_powrotu and self.data_godzina_wyjazdu:
+            roznica = self.data_godzina_powrotu - self.data_godzina_wyjazdu
+            sekundy = roznica.total_seconds()
+            godziny = int(sekundy // 3600)
+            minuty = int((sekundy % 3600) // 60)
+            return f"{godziny}h {minuty}min"
     
 

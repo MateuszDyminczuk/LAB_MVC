@@ -1,0 +1,34 @@
+{% load static %}
+<!DOCTYPE html>
+<html lang="pl">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <link rel="stylesheet" href="{% static 'css/login.css' %}">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0/css/all.min.css">
+    <title>Logowanie - Nasza Remiza</title>
+</head>
+<body>
+    <header>
+        <i class="fas fa-fire-extinguisher"></i>
+        <h1>Nasza Remiza</h1>
+    </header>
+    <main>
+        <form class="login" method="POST">
+            {% csrf_token %}
+            <div class="form">
+                <label for="email">Login</label>
+                <input type="text" id="username" name="username" required>
+            </div>
+            <div class="form">
+                <label for="password">Hasło</label>
+                <input type="password" id="password" name="password" required>
+            </div>
+            <button type="submit" class="submit">Zaloguj</button>
+        </form>
+    </main>
+    <footer>
+        <p>&copy; 2026 Nasza Remiza. Wszelkie prawa zastrzeżone.</p>
+    </footer>
+</body>
+</html>

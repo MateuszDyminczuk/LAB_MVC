@@ -1,0 +1,155 @@
+:root {
+  --primary: #FF4500;  
+  --bg: #D3D3D3;      
+  --text: #1e293b;     
+  --sidebar-dark: #1e293b; 
+  --white: #ffffff;
+  --radius: 8px;       
+}
+
+* {
+  margin: 0;
+  padding: 0;
+  box-sizing: border-box;
+  font-family: 'Inter', sans-serif; 
+}
+
+body {
+  background-color: var(--bg);
+}
+
+
+.top-header {
+  background-color: var(--primary);
+  height: 60px;
+  display: flex;
+  align-items: center;
+  padding: 0 2rem;
+  position: fixed;
+  width: 100%;
+  top: 0;
+  z-index: 1000;
+  box-shadow: 0 2px 5px rgba(0,0,0,0.1);
+}
+
+.top-header .logo, .top-header .logo i, .top-header .logo span {
+  color: var(--white);
+  font-size: 1.4rem;
+  font-weight: 800;
+  display: flex;
+  align-items: center;
+  gap: 12px;
+}
+
+
+.wrapper {
+  display: flex;
+  margin-top: 60px;
+}
+
+
+.sidebar {
+  width: 200px;
+  background-color: var(--sidebar-dark);
+  height: calc(100vh - 60px);
+  position: fixed;
+  padding-top: 1rem;
+}
+
+.sidebar ul {
+  list-style: none;
+}
+
+.sidebar ul li a {
+  display: flex;
+  align-items: center;
+  padding: 12px 20px;
+  color: #cbd5e1; 
+  text-decoration: none;
+  transition: all 0.2s;
+  margin: 4px 10px;
+  border-radius: var(--radius);
+  
+}
+
+.sidebar ul li a i {
+  color: inherit; 
+  width: 25px;
+  font-size: 1.1rem;
+}
+
+.sidebar ul li a:hover, .sidebar ul li a.active {
+  background-color: var(--primary);
+  color: var(--white);
+}
+
+.sidebar ul li a:hover i, .sidebar ul li a.active i {
+  color: var(--white);
+}
+
+
+.content {
+  margin-left: 250px;
+  padding: 2rem;
+  width: 100%;
+}
+
+.content h2 {
+  margin-bottom: 1.5rem;
+  font-size: 1.8rem;
+}
+
+
+.dashboard-grid {
+  display: grid;
+  grid-template-columns: repeat(auto-fit, minmax(280px, 1fr));
+  gap: 1.5rem;
+}
+
+.card {
+  background: var(--white);
+  padding: 2rem;
+  border-radius: var(--radius);
+  box-shadow: 0 4px 6px -1px rgba(0, 0, 0, 0.1);
+  border-left: 8px solid var(--primary); 
+  transition: transform 0.2s;
+}
+
+.card:hover {
+  transform: translateY(-5px);
+}
+
+.card h3 {
+  font-size: 1.1rem;
+  margin-bottom: 10px;
+  color: var(--sidebar-dark);
+}
+
+.top-header {
+    justify-content: space-between; 
+}
+
+.user-nav {
+    display: flex;
+    align-items: center;
+    gap: 20px;
+    color: white;
+}
+
+.user-info {
+    font-size: 0.9rem;
+    display: flex;
+    align-items: center;
+    gap: 8px;
+}
+
+.logout-btn {
+    color: white;
+    font-size: 1.2rem;
+    transition: color 0.2s;
+    text-decoration: none;
+}
+
+.logout-btn:hover {
+    color: var(--sidebar-dark); 
+}
