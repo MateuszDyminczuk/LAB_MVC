@@ -153,3 +153,45 @@ body {
 .logout-btn:hover {
     color: var(--sidebar-dark); 
 }
+
+.search-form {
+    display: flex;
+    gap: 10px; 
+}
+
+
+.search-input {
+    padding: 8px 15px;
+    border: 1px solid #ddd;
+    border-radius: 8px;
+    outline: none;
+    transition: 0.3s; 
+}
+
+
+.search-input:focus {
+    border-color: #e63946; 
+    box-shadow: 0 0 5px rgba(230, 57, 70, 0.2);
+}
+
+
+.search-btn {
+    padding: 8px 20px;
+    background-color: #e63946;
+    color: white;
+    border: none;
+    border-radius: 8px;
+    cursor: pointer;
+    font-weight: 600;
+}
+
+.search-btn:hover {
+    background-color: #c12e3a; 
+}
+
+.highlight {
+    background-color: rgba(230, 57, 70, 0.1); /* Delikatny czerwony kolor Twojej remizy */
+    border-left: 5px solid #e63946; /* Grubsza kreska z boku */
+    transition: 0.5s;
+    padding-left: 10px; /* Żeby tekst nie dotykał kreski */
+}

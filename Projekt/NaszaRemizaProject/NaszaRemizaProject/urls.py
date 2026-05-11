@@ -19,10 +19,15 @@ from django.urls import path
 from remiza.views import login_view
 from remiza.views import index_view
 from remiza.views import logout_view;
+from remiza.views import strazacy_lista;
+from remiza.views import edytuj_strazaka;
+
 
 urlpatterns = [
     path('admin/', admin_site.urls),
     path('login/', login_view, name='login'),
     path('', index_view, name='index'),
     path('logout/', logout_view, name='logout'),
+    path('strazacy/', strazacy_lista, name='strazacy_view'),
+    path('strazacy/edytuj/<int:pk>/', edytuj_strazaka, name='edytuj_strazaka'),
 ]

@@ -1,0 +1,9 @@
+{% extends 'remiza/base.html' %}
+
+{% block content %}
+    <form method="post" class="search-form">
+        {% csrf_token %}
+        {{ form.as_p }}
+        <button type="submit" class="search-btn">Zapisz zmiany</button>
+    </form>
+{% endblock %}

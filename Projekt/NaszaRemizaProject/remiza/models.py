@@ -1,4 +1,5 @@
 from django.db import models
+from datetime import date
 
 class Sprzet(models.Model):
     
@@ -30,6 +31,12 @@ class Strazak(models.Model):
     nazwisko = models.CharField(max_length=30)
     stopien = models.CharField(max_length=30, choices=STOPNIE, default='strazak')
     data_badan = models.DateField(verbose_name="Data ważności badań")
+    @property
+    def dni_do_badan(self):
+        if self.data_badan:
+            
+            return (self.data_badan - date.today()).days
+        return None
 
     class Meta:
         verbose_name = "Strażak"
@@ -62,6 +69,21 @@ class Pojazd(models.Model):
     oznaczenie = models.CharField(max_length=20) 
     numer_operacyjny = models.CharField(max_length=20, unique=True) 
     sprawny = models.BooleanField(default=True)
+    data_przegladu = models.DateField(null=True, blank=True, verbose_name="Data przeglądu")
+    data_oc = models.DateField(null=True, blank=True, verbose_name="Data ubezpieczenia OC")
+
+
+    @property
+    def dni_do_przegladu(self):
+        if self.data_przegladu:
+            return (self.data_przegladu - date.today()).days 
+        return None
+
+    @property
+    def dni_do_oc(self):
+        if self.data_oc:
+            return (self.data_oc - date.today()).days
+        return None
 
     class Meta:
         verbose_name = "Pojazd i Łódź"

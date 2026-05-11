@@ -1,18 +1,20 @@
 {% load static %}
 <!DOCTYPE html>
 <html lang="pl">
+
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>NaszaRemiza - System Zarządzania</title>
     <link rel="stylesheet" href="{% static 'css/base.css' %}">
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0/css/all.min.css">
-    
-<link rel="preconnect" href="https://fonts.googleapis.com">
-<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
-<link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;600;800&display=swap" rel="stylesheet">
+
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;600;800&display=swap" rel="stylesheet">
 
 </head>
+
 <body>
 
     <header class="top-header">
@@ -21,24 +23,24 @@
             <span>NaszaRemiza</span>
         </div>
         <div class="user-nav">
-    <div class="user-info">
-        <i class="fas fa-user-shield"></i>
-        <span>
-            {{ request.user.username }} 
-            {% if request.user.is_superuser %}(Admin){% else %}(Strażak){% endif %}
-        </span>
-    </div>
-    <a href="{% url 'logout' %}" class="logout-btn" title="Wyloguj">
-        <i class="fas fa-power-off"></i>
-    </a>
-</div>
+            <div class="user-info">
+                <i class="fas fa-user-shield"></i>
+                <span>
+                    {{ request.user.username }}
+                    {% if request.user.is_superuser %}(Admin){% else %}(Strażak){% endif %}
+                </span>
+            </div>
+            <a href="{% url 'logout' %}" class="logout-btn" title="Wyloguj">
+                <i class="fas fa-power-off"></i>
+            </a>
+        </div>
     </header>
 
     <div class="wrapper">
         <nav class="sidebar">
             <ul>
-                <li><a href="#" class="active"><i class="fas fa-home"></i> <span>Główna</span></a></li>
-                <li><a href="#"><i class="fas fa-users"></i> <span>Strażacy</span></a></li>
+                <li><a href="{% url 'index' %}" class="active"><i class="fas fa-home"></i> <span>Główna</span></a></li>
+                <li><a href="{% url 'strazacy_view' %}"><i class="fas fa-users"></i> <span>Strażacy</span></a></li>
                 <li><a href="#"><i class="fas fa-truck-moving"></i> <span>Pojazdy</span></a></li>
                 <li><a href="#"><i class="fas fa-bullhorn"></i> <span>Wyjazdy</span></a></li>
                 <li><a href="#"><i class="fas fa-tools"></i> <span>Sprzęt</span></a></li>
@@ -49,9 +51,88 @@
             {% block content %}
             <h2>Dashboard</h2>
             <div class="dashboard-grid">
-                <div class="card">Ostatnie wyjazdy</div>
-                <div class="card">Stanowisko bojowe</div>
-                <div class="card">Sprzęt do przeglądu</div>
+                <div class="card">
+                    <h3>Stan Osobowy</h3>
+                    <div
+                        style="max-height: 140px; overflow-y: auto; padding-right: 10px; margin-top: 15px; text-align: left;">
+
+                        {% for osoba in strazacy %}
+                        <div
+                            style="border-bottom: 1px solid #eee; margin-bottom: 8px; padding-bottom: 5px; display: flex; align-items: center; justify-content: space-between;">
+                            <div>
+                                <strong style="font-size: 1rem;">{{ osoba.imie }} {{ osoba.nazwisko }}</strong><br>
+                                <small style="color: #666; text-transform: uppercase; letter-spacing: 0.5px;">
+                                    <i class="fas fa-medal" style="color: #ffd700;"></i> {{ osoba.get_stopien_display }}
+                                </small>
+                            </div>
+
+                            {% if osoba.dni_do_badan < 0 %} <i class="fas fa-circle"
+                                style="font-size: 0.7rem; color: #e63946;"
+                                title="Badania NIEWAŻNE! (Po terminie: {{ osoba.dni_do_badan }} dni)"></i>
+                                {% elif osoba.dni_do_badan < 30 %} <i class="fas fa-circle"
+                                    style="font-size: 0.7rem; color: #f4a261;"
+                                    title="Badania kończą się za {{ osoba.dni_do_badan }} dni"></i>
+                                    {% else %}
+                                    <i class="fas fa-circle" style="font-size: 0.7rem; color: #2a9d8f;"
+                                        title="Badania ważne (Zostało: {{ osoba.dni_do_badan }} dni)"></i>
+                                    {% endif %}
+                        </div>
+                        {% empty %}
+                        <p style="color: #999;">Brak strażaków w bazie.</p>
+                        {% endfor %}
+
+                    </div>
+                </div>
+
+                <div class="card">
+                    <div style="max-height: 200px; overflow-y: auto; padding-right: 10px;">
+                        <h3>Ostatni Wyjazd</h3>
+                    {% if ostatni_wyjazd %}
+                    <p style="font-size: 1.2rem; font-weight: 600; margin-top: 10px; color: #e63946;">
+                        <i class="fas fa-map-marker-alt"></i> {{ ostatni_wyjazd.miejsce }}
+                    </p>
+                    <p style="font-size: 0.9rem; color: #666;">
+                        {{ ostatni_wyjazd.data_godzina_wyjazdu|date:"d.m.Y H:i" }}
+                    </p>
+                    <p style="font-size: 0.9rem; color: #666;">
+                        {{ ostatni_wyjazd.get_rodzaj_display }}
+                    </p>
+                    <p style="font-size: 0.9rem; color: #666; margin-top: 10px;">
+                        {{ ostatni_wyjazd.opis }}
+                    </p>
+                    {% else %}
+                    <p style="margin-top: 10px; color: #999;">Brak zarejestrowanych akcji</p>
+                    {% endif %}
+                    </div>
+                </div>
+
+                <div class="card">
+                    <h3>Pojazdy</h3>
+                    <div
+                        style="max-height: 140px; overflow-y: auto; padding-right: 10px; margin-top: 15px; text-align: left;">
+
+                        {% for auto in pojazdy %}
+                        <div style="border-bottom: 1px solid #eee; margin-bottom: 10px; padding-bottom: 5px;">
+                            <strong><i class="fas fa-truck-fire"></i> {{ auto.nazwa }}</strong> ({{ auto.numer_operacyjny }})<br>
+                            <span style="font-size: 0.9rem;">
+                                Przegląd:
+                                {% if auto.dni_do_przegladu < 30 %} <b style="color: #e63946;">{{ auto.dni_do_przegladu }} dni</b>
+                                    {% else %}
+                                    <b style="color: #2a9d8f;">{{ auto.dni_do_przegladu }} dni</b>
+                                    {% endif %}
+                                    | OC:
+                                    {% if auto.dni_do_oc < 30 %} <b style="color: #e63946;">{{ auto.dni_do_oc }} dni</b>
+                                        {% else %}
+                                        <b style="color: #2a9d8f;">{{ auto.dni_do_oc }} dni</b>
+                                        {% endif %}
+                            </span>
+                        </div>
+                        {% empty %}
+                        <p style="color: #999;">Brak pojazdów.</p>
+                        {% endfor %}
+
+                    </div>
+                </div>
                 <div class="card">Najbliższe szkolenia</div>
             </div>
             {% endblock %}
@@ -59,4 +140,5 @@
     </div>
 
 </body>
+
 </html>

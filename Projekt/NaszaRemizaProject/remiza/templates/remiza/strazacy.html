@@ -1,0 +1,30 @@
+{% extends 'remiza/base.html' %}
+
+{% block content %}
+<div class="card">
+    <div style="display: flex; justify-content: space-between; align-items: center; margin-bottom: 20px;">
+        <h2 style="margin: 0;">Lista Strażaków OSP</h2>
+        <form method="GET" action="{% url 'strazacy_view' %}" class="search-form">
+            <input type="text" name="szukaj" class="search-input" placeholder="Wpisz nazwisko..."
+                value="{{ request.GET.szukaj }}">
+            <button type="submit" class="search-btn">Szukaj</button>
+        </form>
+    </div>
+
+    <ul>
+        {% for osoba in lista_strazakow %}
+        <li class="{% if request.GET.szukaj and request.GET.szukaj.lower in osoba.nazwisko.lower %}highlight{% endif %}"
+            style="margin-bottom: 10px; list-style: none; padding: 5px;">
+            <a href="{% url 'edytuj_strazaka' osoba.id %}" style="text-decoration: none; color: inherit;">
+                <strong style="font-size: 1rem;">{{ osoba.imie }} {{ osoba.nazwisko }}</strong>
+            </a>
+            <br>
+            <small style="color: #666; text-transform: uppercase; letter-spacing: 0.5px;">
+                <i class="fas fa-medal" style="color: #ffd700;"></i> {{ osoba.get_stopien_display }}
+            </small>
+        </li>
+        {% endfor %}
+    </ul>
+</div>
+
+{% endblock %}
