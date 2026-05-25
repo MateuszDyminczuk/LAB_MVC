@@ -1,0 +1,64 @@
+{% extends 'remiza/base.html' %}
+
+{% block content %}
+<style>
+    /* Stylowanie całej listy jako siatki */
+    ul#id_pojazdy, ul#id_ratownicy {
+        display: grid;
+        grid-template-columns: repeat(auto-fill, minmax(200px, 1fr));
+        gap: 10px;
+        padding: 0;
+        list-style-type: none; 
+    }
+
+    
+    ul#id_pojazdy li, ul#id_ratownicy li {
+        background: #f8fafc;
+        border: 1px solid #e2e8f0;
+        padding: 10px 14px;
+        border-radius: 8px;
+        display: flex;
+        align-items: center;
+        gap: 10px;
+        cursor: pointer;
+        transition: all 0.2s ease;
+    }
+
+    
+    ul#id_pojazdy li:hover, ul#id_ratownicy li:hover {
+        background: #f1f5f9;
+        border-color: #cbd5e1;
+    }
+
+    
+    ul#id_pojazdy input[type="checkbox"], ul#id_ratownicy input[type="checkbox"] {
+        width: 18px;
+        height: 18px;
+        accent-color: #28a745; 
+        cursor: pointer;
+    }
+</style>
+
+<div style="max-width: 600px; margin: 40px auto; padding: 30px; background: #ffffff; border-radius: 16px; box-shadow: 0 4px 6px -1px rgba(0,0,0,0.1);">
+    
+    <h2 style="font-family: 'Inter', sans-serif; font-weight: 700; color: #1e293b; margin-bottom: 24px; display: flex; align-items: center; gap: 10px;">
+        <i class="fas fa-fire-extinguisher" style="color: #ff4500;"></i> Nowy raport z akcji
+    </h2>
+
+    <form method="post" style="display: flex; flex-direction: column; gap: 20px;">
+        {% csrf_token %}
+        
+        {{ form.as_p }}
+
+        <div style="display: flex; gap: 12px; margin-top: 10px;">
+            <button type="submit" style="background-color: #28a745; color: #ffffff; font-family: 'Inter', sans-serif; font-weight: 700; padding: 12px 24px; border-radius: 12px; border: none; cursor: pointer; display: flex; align-items: center; gap: 8px; flex: 1; justify-content: center;">
+                <i class="fas fa-plus"></i> Zapisz wyjazd
+            </button>
+            
+            <a href="{% url 'wyjazdy_view' %}" style="background-color: #64748b; color: #ffffff; font-family: 'Inter', sans-serif; font-weight: 700; padding: 12px 24px; border-radius: 12px; text-decoration: none; text-align: center; display: flex; align-items: center; justify-content: center; flex: 1;">
+                Anuluj
+            </a>
+        </div>
+    </form>
+</div>
+{% endblock %}

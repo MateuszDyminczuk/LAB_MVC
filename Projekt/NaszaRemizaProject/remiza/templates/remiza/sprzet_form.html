@@ -1,0 +1,25 @@
+{% extends 'remiza/base.html' %}
+
+{% block content %}
+<div style="max-width: 600px; margin: 40px auto; padding: 30px; background: #ffffff; border-radius: 16px; box-shadow: 0 4px 6px -1px rgba(0,0,0,0.1); font-family: 'Inter', sans-serif;">
+    
+    <h2 style="font-weight: 700; color: #1e293b; margin-bottom: 24px;">
+        <i class="fas fa-toolbox" style="color: #ff4500; margin-right: 10px;"></i> {{ tytul }}
+    </h2>
+
+    <form method="post" style="display: flex; flex-direction: column; gap: 20px;">
+        {% csrf_token %}
+        
+        {{ form.as_p }}
+
+        <div style="display: flex; gap: 12px; margin-top: 10px;">
+            <button type="submit" style="background-color: #28a745; color: #ffffff; font-weight: 700; padding: 12px 24px; border-radius: 12px; border: none; cursor: pointer; flex: 1;">
+                Zapisz sprzęt
+            </button>
+            <a href="{% url 'sprzet_lista' %}" style="background-color: #64748b; color: #ffffff; font-weight: 700; padding: 12px 24px; border-radius: 12px; text-decoration: none; text-align: center; flex: 1;">
+                Anuluj
+            </a>
+        </div>
+    </form>
+</div>
+{% endblock %}

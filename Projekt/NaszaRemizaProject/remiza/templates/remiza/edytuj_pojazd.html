@@ -5,11 +5,8 @@
         {% csrf_token %}
         {{ form.as_p }}
         <button type="submit" class="search-btn" style="background-color: #28a745;">Zapisz zmiany</button>
-        {% if strazak.pk %}
-        <a href="{% url 'usun_strazaka' strazak.pk %}" class="search-btn" onclick="return confirm('Czy na pewno chcesz usunąć tego strażaka?')" >Usuń</a>
-        {% endif %}
+        {% if pojazd.pk %}
+        <a style="text-decoration: none;" href="{% url 'usun_pojazd' pojazd.pk %}" class="search-btn" onclick="return confirm('Czy na pewno chcesz usunąć ten pojazd?')" >Usuń</a>
     </form>
-    
-    
-    
+        {%endif%}
 {% endblock %}

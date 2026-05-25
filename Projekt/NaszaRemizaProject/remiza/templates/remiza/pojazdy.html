@@ -1,0 +1,66 @@
+{% extends 'remiza/base.html' %}
+
+{% block content %}
+ {% if user.is_staff %}
+    <div style="margin-bottom: 20px;">
+        <a href="{% url 'dodaj_pojazd' %}" class="search-btn" style="text-decoration: none; background-color: #28a745;"> <i class="fas fa-plus"></i> Dodaj nowy pojazd</a>
+    </div>
+    {% endif %}
+<div class="dashboard-grid">
+    {% for pojazd in lista_pojazdow %}     
+        <div class="card1" style="display: flex; flex-direction: column; justify-content: space-between; min-height: 170px; padding: 20px;">
+            
+            <div style="display: flex; justify-content: space-between; align-items: flex-start; margin-bottom: 15px;">
+                <a href="{% url 'edytuj_pojazd' pojazd.id %}" style="text-decoration: none;">
+                <div>
+                    <strong style="font-size: 1.15rem; color: #1e293b; display: block; margin-bottom: 4px;">
+                        <i class="fas fa-truck-fire" style="color: #ff4500; margin-right: 6px;"></i>{{ pojazd.nazwa }}
+                    </strong>
+                    <span style="color: #64748b; font-size: 0.85rem;">
+                        Numery: <b>{{ pojazd.numer_operacyjny }}</b> | Typ: {{ pojazd.oznaczenie }}
+                    </span>
+                </div>
+                
+                {% if pojazd.sprawny %}
+                    <span style="background-color: #2a9d8f; color: white; padding: 4px 8px; border-radius: 6px; font-size: 0.75rem; font-weight: 700; letter-spacing: 0.5px;">W SŁUŻBIE</span>
+                {% else %}
+                    <span style="background-color: #e63946; color: white; padding: 4px 8px; border-radius: 6px; font-size: 0.75rem; font-weight: 700; letter-spacing: 0.5px;">NIESPRAWNY</span>
+                {% endif %}
+                </a>
+            </div>
+
+            <div style="font-size: 0.95rem; color: #334155; margin-bottom: 15px; display: flex; align-items: center; gap: 8px;">
+                <i class="fas fa-fire-alt" style="color: #ff4500; font-size: 1.1rem;"></i> 
+                <span>Wyjazdów w tym roku: <b>{{ pojazd.liczba_wyjazdow_rok }}</b></span>
+            </div>
+
+            <hr style="border: 0; border-top: 1px solid #e2e8f0; margin: 0 0 12px 0;">
+
+            <div style="font-size: 0.85rem; color: #64748b; display: flex; justify-content: space-between; align-items: center;">
+                <div>
+                    <i class="far fa-calendar-check" style="margin-right: 4px;"></i>Przegląd: 
+                    {% if pojazd.dni_do_przegladu < 30 %}
+                        <b style="color: #e63946;">{{ pojazd.dni_do_przegladu }} dni</b>
+                    {% else %}
+                        <b style="color: #2a9d8f;">{{ pojazd.dni_do_przegladu }} dni</b>
+                    {% endif %}
+                </div>
+                <div>
+                    <i class="far fa-shield-check" style="margin-right: 4px;"></i>OC: 
+                    {% if pojazd.dni_do_oc < 30 %}
+                        <b style="color: #e63946;">{{ pojazd.dni_do_oc }} dni</b>
+                    {% else %}
+                        <b style="color: #2a9d8f;">{{ pojazd.dni_do_oc }} dni</b>
+                    {% endif %}
+                </div>
+            </div>
+
+        </div>
+    {% empty %}
+        <div class="card1" style="grid-column: 1 / -1; text-align: center; color: #64748b; padding: 30px;">
+            <i class="fas fa-info-circle" style="font-size: 1.5rem; margin-bottom: 10px; display: block;"></i>
+            Brak zarejestrowanych pojazdów w bazie danych.
+        </div>
+    {% endfor %}
+</div>
+{% endblock %}

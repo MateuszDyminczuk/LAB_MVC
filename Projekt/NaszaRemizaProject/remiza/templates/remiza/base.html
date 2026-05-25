@@ -39,11 +39,11 @@
     <div class="wrapper">
         <nav class="sidebar">
             <ul>
-                <li><a href="{% url 'index' %}" class="active"><i class="fas fa-home"></i> <span>Główna</span></a></li>
-                <li><a href="{% url 'strazacy_view' %}"><i class="fas fa-users"></i> <span>Strażacy</span></a></li>
-                <li><a href="#"><i class="fas fa-truck-moving"></i> <span>Pojazdy</span></a></li>
-                <li><a href="#"><i class="fas fa-bullhorn"></i> <span>Wyjazdy</span></a></li>
-                <li><a href="#"><i class="fas fa-tools"></i> <span>Sprzęt</span></a></li>
+                <li><a href="{% url 'index' %}" class="{% if request.resolver_match.url_name == 'index' %}active{% endif %}"><i class="fas fa-home"></i> <span>Główna</span></a></li>
+                <li><a href="{% url 'strazacy_view' %}" class="{% if request.resolver_match.url_name == 'strazacy_view' %}active{% endif %}"><i class="fas fa-users"></i> <span>Strażacy</span></a></li>
+                <li><a href="{% url 'pojazdy_view' %}" class="{% if request.resolver_match.url_name == 'pojazdy' %}active{% endif %}"><i class="fas fa-truck-moving"></i> <span>Pojazdy</span></a></li>
+                <li><a href="{% url 'wyjazdy_view' %}" class="{% if request.resolver_match.url_name == 'wyjazd' %}active{% endif %}"><i class="fas fa-bullhorn"></i> <span>Wyjazdy</span></a></li>
+                <li><a href="{% url 'sprzet_lista' %}"><i class="fas fa-tools"></i> <span>Sprzęt</span></a></li>
             </ul>
         </nav>
 
@@ -57,8 +57,7 @@
                         style="max-height: 140px; overflow-y: auto; padding-right: 10px; margin-top: 15px; text-align: left;">
 
                         {% for osoba in strazacy %}
-                        <div
-                            style="border-bottom: 1px solid #eee; margin-bottom: 8px; padding-bottom: 5px; display: flex; align-items: center; justify-content: space-between;">
+                        <div style="border-bottom: 1px solid #eee; margin-bottom: 8px; padding-bottom: 5px; display: flex; align-items: center; justify-content: space-between;">
                             <div>
                                 <strong style="font-size: 1rem;">{{ osoba.imie }} {{ osoba.nazwisko }}</strong><br>
                                 <small style="color: #666; text-transform: uppercase; letter-spacing: 0.5px;">

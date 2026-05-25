@@ -9,6 +9,7 @@ class Sprzet(models.Model):
     numer_inwentarzowy = models.CharField(max_length=30, unique=True)
     data_zakupu = models.DateField()
     sprawny = models.BooleanField(default=True) 
+    notatki = models.TextField(blank=True, verbose_name="Notatki / Serwis")
 
     class Meta:
         verbose_name = "Sprzęt"
@@ -95,7 +96,7 @@ class Pojazd(models.Model):
     def liczba_wyjazdow_rok(self):
         from datetime import date
         obecny_rok = date.today().year
-        return self.akcja_set.filter(data_godzina_wyjazdu__year=obecny_rok).count()
+        return self.akcje.filter(data_godzina_wyjazdu__year=obecny_rok).count()
     
 class Akcja(models.Model):
     RODZAJE = [
@@ -115,7 +116,7 @@ class Akcja(models.Model):
     data_godzina_powrotu = models.DateTimeField(null=True, blank=True)
     
     dowodca = models.ForeignKey(Strazak, on_delete=models.SET_NULL, null=True, related_name='prowadzone_akcje')
-    pojazd = models.ForeignKey(Pojazd, on_delete=models.SET_NULL, null=True, verbose_name="Pojazd")
+    pojazdy = models.ManyToManyField(Pojazd, related_name='akcje', verbose_name="Pojazdy biorące udział")
     ratownicy = models.ManyToManyField(Strazak, related_name='udzial_w_akcjach', verbose_name="Skład osobowy")
 
     class Meta:
@@ -133,4 +134,6 @@ class Akcja(models.Model):
             minuty = int((sekundy % 3600) // 60)
             return f"{godziny}h {minuty}min"
     
+
+
 

@@ -115,11 +115,27 @@ body {
   transition: transform 0.2s;
 }
 
+
 .card:hover {
   transform: translateY(-5px);
 }
 
 .card h3 {
+  font-size: 1.1rem;
+  margin-bottom: 10px;
+  color: var(--sidebar-dark);
+}
+
+.card1 {
+  background: var(--white);
+  padding: 2rem;
+  border-radius: var(--radius);
+  box-shadow: 0 4px 6px -1px rgba(0, 0, 0, 0.1);
+  border-left: 8px solid var(--primary); 
+  transition: transform 0.2s;
+}
+
+.card1 h3 {
   font-size: 1.1rem;
   margin-bottom: 10px;
   color: var(--sidebar-dark);
@@ -190,8 +206,11 @@ body {
 }
 
 .highlight {
-    background-color: rgba(230, 57, 70, 0.1); /* Delikatny czerwony kolor Twojej remizy */
-    border-left: 5px solid #e63946; /* Grubsza kreska z boku */
+    background-color: rgba(230, 57, 70, 0.1); 
+    border-left: 5px solid #e63946; 
     transition: 0.5s;
-    padding-left: 10px; /* Żeby tekst nie dotykał kreski */
+    padding-left: 10px; 
 }
+
+
+

@@ -1,0 +1,73 @@
+{% extends 'remiza/base.html' %}
+
+{% block content %}
+<div style="max-width: 1200px; margin: 20px auto; padding: 20px; font-family: 'Inter', 'Segoe UI', sans-serif;">
+    
+    <div style="display: flex; justify-content: space-between; align-items: center; margin-bottom: 30px;">
+        <h1 style="font-weight: 700; color: #1e293b; margin: 0;">
+            <i class="fas fa-list-ul" style="color: #ff4500; margin-right: 10px;"></i> Rejestr Wyjazdów Bojowych
+        </h1>
+        
+        <a href="{% url 'dodaj_akcje' %}" style="text-decoration: none; background-color: #28a745; color: #ffffff; font-weight: 700; padding: 12px 24px; border-radius: 14px; display: inline-flex; align-items: center; gap: 8px; font-size: 1.1rem; -webkit-font-smoothing: antialiased; box-shadow: 0 4px 6px -1px rgba(40, 167, 69, 0.2);">
+            <i class="fas fa-plus" style="font-size: 1.2rem;"></i> Dodaj nowy wyjazd
+        </a>
+    </div>
+
+    <div style="background: #ffffff; border-radius: 16px; box-shadow: 0 4px 6px -1px rgba(0,0,0,0.05); overflow: hidden;">
+        {% if lista_akcji %}
+            <table style="width: 100%; border-collapse: collapse; text-align: left;">
+                <thead>
+                    <tr style="background-color: #f1f5f9; color: #475569; font-weight: 700; border-bottom: 2px solid #e2e8f0;">
+                        <th style="padding: 16px;">Nr zdarzenia</th>
+                        <th style="padding: 16px;">Rodzaj</th>
+                        <th style="padding: 16px;">Miejsce</th>
+                        <th style="padding: 16px;">Data wyjazdu</th>
+                        <th style="padding: 16px;">Czas trwania</th>
+                        <th style="padding: 16px;">Wozy bojowe</th>
+                    </tr>
+                </thead>
+                <tbody>
+                    {% for akcja in lista_akcji %}
+                        <tr style="border-bottom: 1px solid #e2e8f0; color: #1e293b;">
+                            <td style="padding: 16px; font-weight: 700;">
+                                <a href="{% url 'szczegoly_akcji' akcja.id %}" style="color: #ff4500; text-decoration: none; border-bottom: 1px dashed transparent; transition: all 0.2s;" onmouseover="this.style.borderColor='#ff4500'" onmouseout="this.style.borderColor='transparent'">
+                                    {{ akcja.numer_zdarzenia }}
+                                </a>
+                            </td>
+                            <td style="padding: 16px;">
+                                <span style="background: #e0f2fe; color: #0369a1; padding: 4px 8px; border-radius: 6px; font-size: 0.9rem; font-weight: 600;">
+                                    {{ akcja.get_rodzaj_display }}
+                                </span>
+                            </td>
+                            <td style="padding: 16px;">{{ akcja.miejsce }}</td>
+                            <td style="padding: 16px;">{{ akcja.data_godzina_wyjazdu|date:"d.m.Y H:i" }}</td>
+                            <td style="padding: 16px; font-weight: 600;">{{ akcja.czas_trwania }}</td>
+                            
+                            <td style="padding: 16px; color: #64748b;">
+                                {% if akcja.pojazdy.all %}
+                                    <div style="display: flex; flex-direction: column; gap: 4px;">
+                                        {% for p in akcja.pojazdy.all %}
+                                            <span style="display: inline-flex; align-items: center; gap: 4px; font-size: 0.95rem;">
+                                                <i class="fas fa-truck-fire" style="color: #ff4500; font-size: 0.85rem;"></i> {{ p.nazwa }}
+                                            </span>
+                                        {% endfor %}
+                                    </div>
+                                {% else %}
+                                    <span style="color: #cbd5e1;">---</span>
+                                {% endif %}
+                            </td>
+                        </tr>
+                    {% endfor %}
+                </tbody>
+            </table>
+        {% else %}
+            <div style="padding: 40px; text-align: center; color: #64748b;">
+                <i class="fas fa-folder-open" style="font-size: 3rem; color: #cbd5e1; margin-bottom: 15px;"></i>
+                <p style="margin: 0; font-size: 1.1rem;">Brak zarejestrowanych akcji w bazie danych.</p>
+                <p style="margin: 5px 0 0 0; font-size: 0.9rem; color: #94a3b8;">Użyj przycisku powyżej, aby dodać pierwszy raport.</p>
+            </div>
+        {% endif %}
+    </div>
+
+</div>
+{% endblock %}

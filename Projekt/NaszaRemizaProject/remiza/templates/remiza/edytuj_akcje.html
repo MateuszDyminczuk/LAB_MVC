@@ -1,0 +1,49 @@
+{% extends 'remiza/base.html' %}
+
+{% block content %}
+<style>
+    ul#id_pojazdy, ul#id_ratownicy {
+        display: grid;
+        grid-template-columns: repeat(auto-fill, minmax(200px, 1fr));
+        gap: 10px;
+        padding: 0;
+        list-style-type: none;
+    }
+    ul#id_pojazdy li, ul#id_ratownicy li {
+        background: #f8fafc;
+        border: 1px solid #e2e8f0;
+        padding: 10px 14px;
+        border-radius: 8px;
+        display: flex;
+        align-items: center;
+        gap: 10px;
+        cursor: pointer;
+    }
+    ul#id_pojazdy input[type="checkbox"], ul#id_ratownicy input[type="checkbox"] {
+        width: 18px;
+        height: 18px;
+        accent-color: #28a745;
+    }
+</style>
+
+<div style="max-width: 600px; margin: 40px auto; padding: 30px; background: #ffffff; border-radius: 16px; box-shadow: 0 4px 6px -1px rgba(0,0,0,0.1); font-family: 'Inter', sans-serif;">
+    
+    <h2 style="font-weight: 700; color: #1e293b; margin-bottom: 24px;">
+        <i class="fas fa-edit" style="color: #28a745; margin-right: 10px;"></i> Edycja raportu #{{ akcja.numer_zdarzenia }}
+    </h2>
+
+    <form method="post" style="display: flex; flex-direction: column; gap: 20px;">
+        {% csrf_token %}
+        {{ form.as_p }}
+
+        <div style="display: flex; gap: 12px; margin-top: 10px;">
+            <button type="submit" style="background-color: #28a745; color: #ffffff; font-weight: 700; padding: 12px 24px; border-radius: 12px; border: none; cursor: pointer; flex: 1;">
+                Zapisz zmiany
+            </button>
+            <a href="{% url 'szczegoly_akcji' akcja.id %}" style="background-color: #64748b; color: #ffffff; font-weight: 700; padding: 12px 24px; border-radius: 12px; text-decoration: none; text-align: center; flex: 1;">
+                Anuluj
+            </a>
+        </div>
+    </form>
+</div>
+{% endblock %}
