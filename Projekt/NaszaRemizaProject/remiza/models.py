@@ -1,5 +1,6 @@
 from django.db import models
 from datetime import date
+from django.contrib.auth.models import User
 
 class Sprzet(models.Model):
     
@@ -28,8 +29,9 @@ class Strazak(models.Model):
         ('naczelnik', 'Naczelnik'),
     ]
 
-    imie = models.CharField(max_length=30)
-    nazwisko = models.CharField(max_length=30)
+    user = models.OneToOneField(User, on_delete=models.CASCADE, null=True, blank=True, related_name='profil_strazaka')
+    imie = models.CharField(max_length=100)
+    nazwisko = models.CharField(max_length=100)
     stopien = models.CharField(max_length=30, choices=STOPNIE, default='strazak')
     data_badan = models.DateField(verbose_name="Data ważności badań")
     @property

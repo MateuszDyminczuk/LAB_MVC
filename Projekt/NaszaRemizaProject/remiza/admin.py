@@ -4,16 +4,16 @@ from django.db.models import Count
 from django.utils import timezone
 from django.contrib.auth.models import User, Group
 
-# 1. Funkcja statystyk zostaje bez zmian
+
 def pobierz_statystyki():
     teraz = timezone.now()
-    akcje_miesiac = Akcja.objects.filter(
+    akcje_miesiac = Akcje.objects.filter(
         data_godzina_wyjazdu__month=teraz.month, 
         data_godzina_wyjazdu__year=teraz.year
     ).count()
 
     najczestszy_pojazd = Pojazd.objects.annotate(
-        liczba_akcji=Count('akcja')
+        liczba_akcji=Count('akcje')
     ).order_by('-liczba_akcji').first()
 
     statystyki_rodzajow = Akcja.objects.values('rodzaj').annotate(
@@ -26,7 +26,7 @@ def pobierz_statystyki():
         'statystyki_rodzajow': statystyki_rodzajow,
     }
 
-# 2. Definicje klas Admin (usuwamy dekoratory @admin.register)
+
 class SprzetAdmin(admin.ModelAdmin):
     list_display = ('nazwa', 'producent', 'model', 'data_zakupu', 'numer_inwentarzowy', 'sprawny',)
     list_filter = ('sprawny',)
@@ -37,9 +37,9 @@ class StrazakAdmin(admin.ModelAdmin):
     list_filter = ('stopien',)
     search_fields = ('nazwisko',)
 
+@admin.register(Pojazd)
 class PojazdAdmin(admin.ModelAdmin):
-    list_display = ('numer_operacyjny', 'nazwa', 'oznaczenie', 'sprawny', 'liczba_wyjazdow_rok')
-    list_filter = ('sprawny',)
+    list_display = ['nazwa', 'numer_operacyjny', 'data_przegladu', 'data_oc']
 
 class AkcjaAdmin(admin.ModelAdmin):
     list_display = ('numer_zdarzenia', 'rodzaj', 'data_godzina_wyjazdu', 'miejsce', 'dowodca', 'czas_trwania')
@@ -47,7 +47,7 @@ class AkcjaAdmin(admin.ModelAdmin):
     search_fields = ('numer_zdarzenia', 'miejsce')
     filter_horizontal = ('ratownicy',)
 
-# 3. Twoja niestandardowa strona admina
+
 class NaszaRemizaAdminSite(admin.AdminSite):
     site_header = "System Zarządzania OSP - Panel Naczelnika"
     
@@ -57,7 +57,7 @@ class NaszaRemizaAdminSite(admin.AdminSite):
         extra_context.update(stats)
         return super().index(request, extra_context)
 
-# 4. TWORZYMY OBIEKT I REJESTRUJEMY MODELE
+
 admin_site = NaszaRemizaAdminSite(name='nasz_admin')
 
 admin_site.register(Sprzet, SprzetAdmin)

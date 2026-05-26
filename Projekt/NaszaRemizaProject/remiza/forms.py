@@ -3,9 +3,22 @@ from .models import Strazak, Pojazd, Akcja, Sprzet
 
 
 class StrazakForm(forms.ModelForm):
+    
+    username = forms.CharField(
+        max_length=150, 
+        required=True, 
+        label="Nazwa użytkownika (Login)",
+        widget=forms.TextInput(attrs={'placeholder': 'np. k.nowak'})
+    )
+    password = forms.CharField(
+        required=True, 
+        label="Hasło początkowe",
+        widget=forms.PasswordInput(attrs={'placeholder': 'Min. 8 znaków'})
+    )
+
     class Meta:
         model = Strazak
-        fields = ['imie', 'nazwisko', 'stopien', 'data_badan']
+        fields = ['username', 'password', 'imie', 'nazwisko', 'stopien', 'data_badan']
 
 class PojazdForm(forms.ModelForm):
     class Meta:

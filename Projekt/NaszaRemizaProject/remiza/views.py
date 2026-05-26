@@ -6,6 +6,8 @@ from .models import Strazak, Akcja, Pojazd, Sprzet, Wydarzenie
 from .forms import StrazakForm, PojazdForm, AkcjaForm, SprzetForm
 from django.utils import timezone
 from datetime import date
+from django.contrib.auth.models import User
+from django.contrib import messages
 
 def login_view(request):
     if request.method == 'POST':
@@ -80,16 +82,28 @@ def edytuj_strazaka(request, pk):
 
 @login_required
 def dodaj_strazaka(request):
-    if not request.user.is_staff:
-        return HttpResponseForbidden("Nie masz uprawnień do dodawania osób.")
     if request.method == 'POST':
-        form = StrazakForm(request.POST) 
+        form = StrazakForm(request.POST)
+        
         if form.is_valid():
-            form.save() 
-            return redirect('strazacy_view')
+            username = form.cleaned_data['username']
+            password = form.cleaned_data['password']
+            
+            if User.objects.filter(username=username).exists():
+                messages.error(request, "Taki login jest już zajęty!")
+                return render(request, 'remiza/edytuj_strazaka.html', {'form': form, 'tytul': 'Dodaj Strażaka'})
+                
+            nowy_user = User.objects.create_user(username=username, password=password)
+            
+            strazak = form.save(commit=False)
+            strazak.user = nowy_user 
+            strazak.save() 
+            
+            messages.success(request, f"Dodano strażaka {strazak.imie} {strazak.nazwisko} wraz z kontem.")
+            return redirect('strazacy_view') 
     else:
         form = StrazakForm()
-
+        
     return render(request, 'remiza/edytuj_strazaka.html', {'form': form, 'tytul': 'Dodaj Strażaka'})
 
 @login_required

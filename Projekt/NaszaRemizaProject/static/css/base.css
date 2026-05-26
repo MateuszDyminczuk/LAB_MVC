@@ -212,5 +212,40 @@ body {
     padding-left: 10px; 
 }
 
+.fc .fc-toolbar-title {
+    font-size: 1.1rem !important;
+    font-weight: 700;
+    color: #1e293b;
+}
 
+.fc .fc-button-primary {
+    background-color: #f1f5f9 !important;
+    border-color: #cbd5e1 !important;
+    color: #475569 !important;
+    font-size: 0.8rem !important;
+    font-weight: 600;
+    text-transform: capitalize;
+}
+
+.fc .fc-button-primary:hover {
+    background-color: #e2e8f0 !important;
+}
+
+.fc .fc-button-active {
+    background-color: #cbd5e1 !important;
+    color: #1e293b !important;
+}
+
+.fc-theme-standard td, .fc-theme-standard th {
+    border: 1px solid #e2e8f0 !important;
+}
+
+.fc-event {
+    cursor: pointer;
+    padding: 4px 6px;
+    border-radius: 6px !important;
+    font-weight: 600 !important;
+    margin-bottom: 2px;
+    border: none !important;
+}
 
