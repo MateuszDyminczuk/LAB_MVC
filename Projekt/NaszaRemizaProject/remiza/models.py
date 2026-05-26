@@ -135,5 +135,16 @@ class Akcja(models.Model):
             return f"{godziny}h {minuty}min"
     
 
+class Wydarzenie(models.Model):
+    nazwa = models.CharField(max_length=200, verbose_name="Nazwa wydarzenia")
+    data = models.DateField(verbose_name="Data wydarzenia")
+    notatki = models.TextField(blank=True, verbose_name="Notatki")
 
+
+    class Meta:
+        verbose_name = "Wydarzenie"
+        verbose_name_plural = "Wydarzenia"
+
+    def __str__(self):
+        return self.nazwa
 

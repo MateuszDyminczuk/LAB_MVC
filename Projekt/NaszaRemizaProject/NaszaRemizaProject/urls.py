@@ -33,6 +33,7 @@ from remiza.views import szczegoly_akcji;
 from remiza.views import edytuj_akcje;
 from remiza.views import usun_akcje;
 from remiza.views import sprzet_lista, dodaj_sprzet, edytuj_sprzet, usun_sprzet
+from remiza.views import zapisz_wydarzenie, usun_wydarzenie;
 
 urlpatterns = [
     path('admin/', admin_site.urls),
@@ -56,4 +57,6 @@ urlpatterns = [
     path('sprzet/dodaj/', dodaj_sprzet, name='dodaj_sprzet'),
     path('sprzet/<int:sprzet_id>/edycja/', edytuj_sprzet, name='edytuj_sprzet'),
     path('sprzet/<int:sprzet_id>/usun/', usun_sprzet, name='usun_sprzet'),
+    path('wydarzenia/zapisz/', zapisz_wydarzenie, name='zapisz_wydarzenie'),
+    path('wydarzenia/usun/', usun_wydarzenie, name='usun_wydarzenie'),
 ]

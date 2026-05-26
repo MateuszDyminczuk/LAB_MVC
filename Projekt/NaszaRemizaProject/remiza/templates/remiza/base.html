@@ -13,6 +13,8 @@
     <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
     <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;600;800&display=swap" rel="stylesheet">
 
+    <link href="https://cdn.jsdelivr.net/npm/fullcalendar@6.1.8/index.global.min.css" rel="stylesheet" />
+    <script src="https://cdn.jsdelivr.net/npm/fullcalendar@6.1.8/index.global.min.js"></script>
 </head>
 
 <body>
@@ -39,10 +41,18 @@
     <div class="wrapper">
         <nav class="sidebar">
             <ul>
-                <li><a href="{% url 'index' %}" class="{% if request.resolver_match.url_name == 'index' %}active{% endif %}"><i class="fas fa-home"></i> <span>Główna</span></a></li>
-                <li><a href="{% url 'strazacy_view' %}" class="{% if request.resolver_match.url_name == 'strazacy_view' %}active{% endif %}"><i class="fas fa-users"></i> <span>Strażacy</span></a></li>
-                <li><a href="{% url 'pojazdy_view' %}" class="{% if request.resolver_match.url_name == 'pojazdy' %}active{% endif %}"><i class="fas fa-truck-moving"></i> <span>Pojazdy</span></a></li>
-                <li><a href="{% url 'wyjazdy_view' %}" class="{% if request.resolver_match.url_name == 'wyjazd' %}active{% endif %}"><i class="fas fa-bullhorn"></i> <span>Wyjazdy</span></a></li>
+                <li><a href="{% url 'index' %}"
+                        class="{% if request.resolver_match.url_name == 'index' %}active{% endif %}"><i
+                            class="fas fa-home"></i> <span>Główna</span></a></li>
+                <li><a href="{% url 'strazacy_view' %}"
+                        class="{% if request.resolver_match.url_name == 'strazacy_view' %}active{% endif %}"><i
+                            class="fas fa-users"></i> <span>Strażacy</span></a></li>
+                <li><a href="{% url 'pojazdy_view' %}"
+                        class="{% if request.resolver_match.url_name == 'pojazdy' %}active{% endif %}"><i
+                            class="fas fa-truck-moving"></i> <span>Pojazdy</span></a></li>
+                <li><a href="{% url 'wyjazdy_view' %}"
+                        class="{% if request.resolver_match.url_name == 'wyjazd' %}active{% endif %}"><i
+                            class="fas fa-bullhorn"></i> <span>Wyjazdy</span></a></li>
                 <li><a href="{% url 'sprzet_lista' %}"><i class="fas fa-tools"></i> <span>Sprzęt</span></a></li>
             </ul>
         </nav>
@@ -51,13 +61,14 @@
             {% block content %}
             <h2>Dashboard</h2>
             <div class="dashboard-grid">
+
                 <div class="card">
                     <h3>Stan Osobowy</h3>
                     <div
                         style="max-height: 140px; overflow-y: auto; padding-right: 10px; margin-top: 15px; text-align: left;">
-
                         {% for osoba in strazacy %}
-                        <div style="border-bottom: 1px solid #eee; margin-bottom: 8px; padding-bottom: 5px; display: flex; align-items: center; justify-content: space-between;">
+                        <div
+                            style="border-bottom: 1px solid #eee; margin-bottom: 8px; padding-bottom: 5px; display: flex; align-items: center; justify-content: space-between;">
                             <div>
                                 <strong style="font-size: 1rem;">{{ osoba.imie }} {{ osoba.nazwisko }}</strong><br>
                                 <small style="color: #666; text-transform: uppercase; letter-spacing: 0.5px;">
@@ -79,29 +90,28 @@
                         {% empty %}
                         <p style="color: #999;">Brak strażaków w bazie.</p>
                         {% endfor %}
-
                     </div>
                 </div>
 
                 <div class="card">
                     <div style="max-height: 200px; overflow-y: auto; padding-right: 10px;">
                         <h3>Ostatni Wyjazd</h3>
-                    {% if ostatni_wyjazd %}
-                    <p style="font-size: 1.2rem; font-weight: 600; margin-top: 10px; color: #e63946;">
-                        <i class="fas fa-map-marker-alt"></i> {{ ostatni_wyjazd.miejsce }}
-                    </p>
-                    <p style="font-size: 0.9rem; color: #666;">
-                        {{ ostatni_wyjazd.data_godzina_wyjazdu|date:"d.m.Y H:i" }}
-                    </p>
-                    <p style="font-size: 0.9rem; color: #666;">
-                        {{ ostatni_wyjazd.get_rodzaj_display }}
-                    </p>
-                    <p style="font-size: 0.9rem; color: #666; margin-top: 10px;">
-                        {{ ostatni_wyjazd.opis }}
-                    </p>
-                    {% else %}
-                    <p style="margin-top: 10px; color: #999;">Brak zarejestrowanych akcji</p>
-                    {% endif %}
+                        {% if ostatni_wyjazd %}
+                        <p style="font-size: 1.2rem; font-weight: 600; margin-top: 10px; color: #e63946;">
+                            <i class="fas fa-map-marker-alt"></i> {{ ostatni_wyjazd.miejsce }}
+                        </p>
+                        <p style="font-size: 0.9rem; color: #666;">
+                            {{ ostatni_wyjazd.data_godzina_wyjazdu|date:"d.m.Y H:i" }}
+                        </p>
+                        <p style="font-size: 0.9rem; color: #666;">
+                            {{ ostatni_wyjazd.get_rodzaj_display }}
+                        </p>
+                        <p style="font-size: 0.9rem; color: #666; margin-top: 10px;">
+                            {{ ostatni_wyjazd.opis }}
+                        </p>
+                        {% else %}
+                        <p style="margin-top: 10px; color: #999;">Brak zarejestrowanych akcji</p>
+                        {% endif %}
                     </div>
                 </div>
 
@@ -109,7 +119,6 @@
                     <h3>Pojazdy</h3>
                     <div
                         style="max-height: 140px; overflow-y: auto; padding-right: 10px; margin-top: 15px; text-align: left;">
-
                         {% for auto in pojazdy %}
                         <div style="border-bottom: 1px solid #eee; margin-bottom: 10px; padding-bottom: 5px;">
                             <strong><i class="fas fa-truck-fire"></i> {{ auto.nazwa }}</strong> ({{ auto.numer_operacyjny }})<br>
@@ -129,10 +138,160 @@
                         {% empty %}
                         <p style="color: #999;">Brak pojazdów.</p>
                         {% endfor %}
-
                     </div>
                 </div>
-                <div class="card">Najbliższe szkolenia</div>
+
+                <div class="card">
+                    <h3>Najbliższe Wydarzenia</h3>
+                    <div id="kontener-najblizszych-wydarzen"
+                        style="max-height: 140px; overflow-y: auto; padding-right: 10px; margin-top: 15px; text-align: left;">
+                        {% for w in najblizsze_wydarzenia %}
+                        <div style="border-bottom: 1px solid #eee; margin-bottom: 10px; padding-bottom: 5px;">
+                            <strong><i class="fas fa-star" style="color: #f59e0b;"></i> {{ w.nazwa }}</strong> <br>
+                            <span style="font-size: 0.9rem; color: #555;">
+                                Data: <b style="color: #1e293b;">{{ w.data|date:"d.m.Y" }}</b>
+                            </span>
+                            {% if w.notatki %}
+                            <div style="font-size: 0.85rem; color: #666; font-style: italic; margin-top: 2px;">
+                                {{ w.notatki }}
+                            </div>
+                            {% endif %}
+                        </div>
+                        {% empty %}
+                        <p id="brak-wydarzen-tekst" style="color: #999; margin-top: 15px; font-size: 0.95rem;">Brak
+                            zaplanowanych wydarzeń.</p>
+                        {% endfor %}
+                    </div>
+                </div>
+            </div>
+
+            <div
+                style="margin-top: 30px; background: #ffffff; padding: 25px; border-radius: 16px; box-shadow: 0 4px 6px -1px rgba(0,0,0,0.05); border-top: 4px solid #ff4500; font-family: 'Inter', sans-serif;">
+
+                <div
+                    style="display: flex; justify-content: space-between; align-items: center; margin-bottom: 20px; flex-wrap: wrap; gap: 15px;">
+                    <h3
+                        style="font-weight: 700; color: #1e293b; margin: 0; font-size: 1.25rem; display: flex; align-items: center; gap: 8px;">
+                        <i class="fas fa-calendar-alt" style="color: #ff4500;"></i> Główny Kalendarz Operacyjny
+                        Jednostki
+                    </h3>
+
+                    <div style="display: flex; gap: 15px; font-size: 0.85rem; flex-wrap: wrap;">
+                        <span style="display: flex; align-items: center; gap: 6px;"><span
+                                style="width: 12px; height: 12px; background: #dc2626; border-radius: 4px;"></span>
+                            Akcje ratownicze</span>
+                        <span style="display: flex; align-items: center; gap: 6px;"><span
+                                style="width: 12px; height: 12px; background: #2563eb; border-radius: 4px;"></span>
+                            Przeglądy pojazdów</span>
+                        <span style="display: flex; align-items: center; gap: 6px;"><span
+                                style="width: 12px; height: 12px; background: #9333ea; border-radius: 4px;"></span>
+                            Ubezpieczenia OC</span>
+                        <span style="display: flex; align-items: center; gap: 6px;"><span
+                                style="width: 12px; height: 12px; background: #16a34a; border-radius: 4px;"></span>
+                            Badania strażaków</span>
+                    </div>
+                </div>
+
+                <div id="calendar" style="font-size: 0.9rem;"></div>
+            </div>
+
+            <script type="application/json" id="wyjazdy-data">
+                [
+                    {% for akcja in wyjazdy %}
+                    {
+                        "numer": "{{ akcja.numer_zdarzenia }}",
+                        "start": "{{ akcja.data_godzina_wyjazdu|date:'Y-m-d\TH:i:s' }}",
+                        "end": "{{ akcja.data_godzina_powrotu|date:'Y-m-d\TH:i:s' }}",
+                        "url": "{% url 'szczegoly_akcji' akcja.id %}"
+                    }{% if not forloop.last %},{% endif %}
+                    {% endfor %}
+                ]
+            </script>
+
+            <script type="application/json" id="pojazdy-data">
+                [
+                    {% for woz in pojazdy %}
+                    {
+                        "nazwa": "{{ woz.nazwa }}",
+                        "data_przegladu": "{% if woz.data_przegladu %}{{ woz.data_przegladu|date:'Y-m-d' }}{% endif %}",
+                        "data_oc": "{% if woz.data_oc %}{{ woz.data_oc|date:'Y-m-d' }}{% endif %}"
+                    }{% if not forloop.last %},{% endif %}
+                    {% endfor %}
+                ]
+            </script>
+
+            <script type="application/json" id="strazacy-data">
+                [
+                    {% for strazak in strazacy %}
+                    {
+                        "pelne_nazwisko": "{{ strazak.imie }} {{ strazak.nazwisko }}",
+                        "data_badan": "{% if strazak.data_badan %}{{ strazak.data_badan|date:'Y-m-d' }}{% endif %}"
+                    }{% if not forloop.last %},{% endif %}
+                    {% endfor %}
+                ]
+            </script>
+            <script type="application/json" id="wydarzenia-data">
+                [
+                    {% for w in wydarzenia %}
+                    {
+                        "id": "{{ w.id }}",
+                        "nazwa": "{{ w.nazwa }}",
+                        "data": "{{ w.data|date:'Y-m-d' }}",
+                        "notatki": "{{ w.notatki|escapejs }}"
+                    }{% if not forloop.last %},{% endif %}
+                    {% endfor %}
+                ]
+            </script>
+
+            <script src="{% static 'js/calendar_init.js' %}"></script>
+
+            <div id="wydarzenieModal"
+                style="display: none; position: fixed; z-index: 9999; left: 0; top: 0; width: 100%; height: 100%; background-color: rgba(0,0,0,0.5); align-items: center; justify-content: center;">
+                <div
+                    style="background: #ffffff; padding: 30px; border-radius: 16px; width: 100%; max-width: 400px; box-shadow: 0 10px 25px rgba(0,0,0,0.1); font-family: 'Inter', sans-serif;">
+                    <h3 style="margin-top: 0; color: #1e293b; font-weight: 700;"><i class="fas fa-calendar-plus"
+                            style="color: #f59e0b;"></i> Dodaj Nowe Wydarzenie</h3>
+
+                    <form id="wydarzenieForm"
+                        style="display: flex; flex-direction: column; gap: 15px; margin-top: 20px;">
+                        {% csrf_token %}
+                        <input type="hidden" id="modalData" name="data">
+                        <input type="hidden" id="modalWydarzenieId" name="wydarzenie_id">
+                        <div>
+                            <label
+                                style="display: block; font-size: 0.85rem; font-weight: 600; color: #475569; margin-bottom: 5px;">Wybrany
+                                dzień:</label>
+                            <input type="text" id="modalDataPokaz" disabled
+                                style="width: 100%; padding: 10px; border: 1px solid #cbd5e1; border-radius: 8px; background: #f8fafc; font-weight: 600; color: #1e293b;">
+                        </div>
+
+                        <div>
+                            <label
+                                style="display: block; font-size: 0.85rem; font-weight: 600; color: #475569; margin-bottom: 5px;">Nazwa
+                                wydarzenia:</label>
+                            <input type="text" name="nazwa" required
+                                placeholder="np. Wyjazd gospodarczy, Pogrzeb, Ćwiczenia"
+                                style="width: 100%; padding: 10px; border: 1px solid #cbd5e1; border-radius: 8px; box-sizing: border-box; font-family: inherit;">
+                        </div>
+
+                        <div>
+                            <label
+                                style="display: block; font-size: 0.85rem; font-weight: 600; color: #475569; margin-bottom: 5px;">Notatki
+                                / Opis:</label>
+                            <textarea name="notatki" rows="3" placeholder="Dodatkowe informacje..."
+                                style="width: 100%; padding: 10px; border: 1px solid #cbd5e1; border-radius: 8px; box-sizing: border-box; font-family: inherit; resize: vertical;"></textarea>
+                        </div>
+
+                        <div style="display: flex; gap: 10px; margin-top: 10px;">
+                            <button type="submit"
+                                style="flex: 1; background: #28a745; color: white; border: none; padding: 12px; border-radius: 8px; font-weight: 700; cursor: pointer; font-family: inherit;">Zapisz</button>
+                            <button type="button" onclick="zamknijModal()"
+                                style="flex: 1; background: #64748b; color: white; border: none; padding: 12px; border-radius: 8px; font-weight: 700; cursor: pointer; font-family: inherit;">Anuluj</button>
+                            <button type="button" id="btnUsunWydarzenie"
+                                style="display: none; flex: 1; background: #dc2626; color: white; border: none; padding: 12px; border-radius: 8px; font-weight: 700; cursor: pointer; font-family: inherit;">Usuń</button>
+                        </div>
+                    </form>
+                </div>
             </div>
             {% endblock %}
         </main>
