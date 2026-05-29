@@ -22,7 +22,7 @@
                         <th style="padding: 16px;">Nr inwentarzowy</th>
                         <th style="padding: 16px;">Data zakupu</th>
                         <th style="padding: 16px;">Status</th>
-                        <th style="padding: 16px;">Notatki serwisowe</th>
+                        <th style="padding: 16px;">Stan licznika</th> <th style="padding: 16px;">Notatki serwisowe</th>
                         <th style="padding: 16px; text-align: right;">Akcje</th>
                     </tr>
                 </thead>
@@ -46,6 +46,17 @@
                                     <span style="background: #fee2e2; color: #b91c1c; padding: 4px 10px; border-radius: 20px; font-size: 0.85rem; font-weight: 700;">USZKODZONY</span>
                                 {% endif %}
                             </td>
+                            
+                            <td style="padding: 16px; font-weight: 600;">
+                                {% if s.czy_silnikowy %}
+                                    <span style="color: #0284c7; background: #e0f2fe; padding: 4px 8px; border-radius: 6px; font-size: 0.9rem;">
+                                        <i class="fas fa-hourglass-half"></i> {{ s.motogodziny }} MTH
+                                    </span>
+                                {% else %}
+                                    <span style="color: #cbd5e1;">---</span>
+                                {% endif %}
+                            </td>
+
                             <td style="padding: 16px; color: #475569; font-size: 0.9rem; max-width: 250px; white-space: pre-line;">
                                 {% if s.notatki %}{{ s.notatki }}{% else %}<span style="color: #cbd5e1; font-style: italic;">Brak wpisów</span>{% endif %}
                             </td>

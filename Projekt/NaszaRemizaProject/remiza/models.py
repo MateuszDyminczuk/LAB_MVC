@@ -11,6 +11,8 @@ class Sprzet(models.Model):
     data_zakupu = models.DateField()
     sprawny = models.BooleanField(default=True) 
     notatki = models.TextField(blank=True, verbose_name="Notatki / Serwis")
+    czy_silnikowy = models.BooleanField(default=False, verbose_name="Czy sprzęt posiada silnik?")
+    motogodziny = models.FloatField(default=0.0, verbose_name="Aktualny stan motogodzin (MTH)")
 
     class Meta:
         verbose_name = "Sprzęt"
@@ -34,11 +36,22 @@ class Strazak(models.Model):
     nazwisko = models.CharField(max_length=100)
     stopien = models.CharField(max_length=30, choices=STOPNIE, default='strazak')
     data_badan = models.DateField(verbose_name="Data ważności badań")
+    kurs_podstawowy = models.BooleanField(default=False, verbose_name="Kurs podstawowy OSP")
+    kurs_dowodca = models.BooleanField(default=False, verbose_name="Kurs dowódców")
+    waznosc_kpp = models.DateField(null=True, blank=True, verbose_name="Data ważności KPP")
+
     @property
     def dni_do_badan(self):
         if self.data_badan:
             
             return (self.data_badan - date.today()).days
+        return None
+    
+    @property
+    def dni_do_kpp(self):
+        if self.waznosc_kpp:
+            from datetime import date
+            return (self.waznosc_kpp - date.today()).days
         return None
 
     class Meta:
@@ -74,6 +87,7 @@ class Pojazd(models.Model):
     sprawny = models.BooleanField(default=True)
     data_przegladu = models.DateField(null=True, blank=True, verbose_name="Data przeglądu")
     data_oc = models.DateField(null=True, blank=True, verbose_name="Data ubezpieczenia OC")
+    przebieg = models.PositiveIntegerField(default=0, verbose_name="Aktualny przebieg (km)")
 
 
     @property
@@ -116,10 +130,11 @@ class Akcja(models.Model):
     data_godzina_wyjazdu = models.DateTimeField()
     opis = models.TextField(blank=True)
     data_godzina_powrotu = models.DateTimeField(null=True, blank=True)
-    
     dowodca = models.ForeignKey(Strazak, on_delete=models.SET_NULL, null=True, related_name='prowadzone_akcje')
     pojazdy = models.ManyToManyField(Pojazd, related_name='akcje', verbose_name="Pojazdy biorące udział")
     ratownicy = models.ManyToManyField(Strazak, related_name='udzial_w_akcjach', verbose_name="Skład osobowy")
+    liczniki_pojazdow_po = models.JSONField(default=dict, blank=True, verbose_name="Stany liczników pojazdów po akcji")
+    motogodziny_sprzetu_po = models.JSONField(default=dict, blank=True, verbose_name="Stany motogodzin sprzętu po akcji")
 
     class Meta:
         verbose_name = "Akcja Ratownicza"
@@ -135,6 +150,16 @@ class Akcja(models.Model):
             godziny = int(sekundy // 3600)
             minuty = int((sekundy % 3600) // 60)
             return f"{godziny}h {minuty}min"
+        
+    def zaokraglone_godziny(self):
+        if self.data_godzina_powrotu and self.data_godzina_wyjazdu:
+            roznica = self.data_godzina_powrotu - self.data_godzina_wyjazdu
+            sekundy = roznica.total_seconds()
+            godziny = sekundy / 3600.0
+            
+            import math
+            return math.ceil(godziny) 
+        return 0
     
 
 class Wydarzenie(models.Model):

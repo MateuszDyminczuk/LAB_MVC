@@ -4,12 +4,19 @@
     <form method="post" class="search-form">
         {% csrf_token %}
         {{ form.as_p }}
-        <button type="submit" class="search-btn" style="background-color: #28a745;">Zapisz zmiany</button>
+        
+        {% if request.user.is_superuser %}
+            <button type="submit" class="search-btn" style="background-color: #28a745;">Zapisz zmiany</button>
+        {% else %}
+            <button type="button" class="search-btn" style="background-color: #28a745;" onclick="alert('Nie masz uprawnień do zapisywania zmian ani dodawania strażaków!');">Zapisz zmiany</button>
+        {% endif %}
+
         {% if strazak.pk %}
-        <a href="{% url 'usun_strazaka' strazak.pk %}" class="search-btn" onclick="return confirm('Czy na pewno chcesz usunąć tego strażaka?')" >Usuń</a>
+            {% if request.user.is_superuser %}
+                <a href="{% url 'usun_strazaka' strazak.pk %}" class="search-btn" onclick="return confirm('Czy na pewno chcesz usunąć tego strażaka?')">Usuń</a>
+            {% else %}
+                <a href="#" class="search-btn" onclick="alert('Nie masz uprawnień do usuwania strażaków!'); return false;">Usuń</a>
+            {% endif %}
         {% endif %}
     </form>
-    
-    
-    
 {% endblock %}

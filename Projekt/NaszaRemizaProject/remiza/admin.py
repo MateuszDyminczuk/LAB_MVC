@@ -1,5 +1,5 @@
 from django.contrib import admin
-from .models import Sprzet, Strazak, Pojazd, Akcja
+from .models import Sprzet, Strazak, Pojazd, Akcja, Wydarzenie
 from django.db.models import Count
 from django.utils import timezone
 from django.contrib.auth.models import User, Group
@@ -7,7 +7,7 @@ from django.contrib.auth.models import User, Group
 
 def pobierz_statystyki():
     teraz = timezone.now()
-    akcje_miesiac = Akcje.objects.filter(
+    akcje_miesiac = Akcja.objects.filter(
         data_godzina_wyjazdu__month=teraz.month, 
         data_godzina_wyjazdu__year=teraz.year
     ).count()

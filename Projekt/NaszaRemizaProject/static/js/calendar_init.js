@@ -30,10 +30,17 @@ document.addEventListener('DOMContentLoaded', function() {
     });
 
     strazacyData.forEach(function(strazak) {
-        if (strazak.data_badan) {
-            eventList.push({ title: '👨🏻‍⚕️ Badania: ' + strazak.pelne_nazwisko, start: strazak.data_badan, allDay: true, backgroundColor: '#16a34a', borderColor: '#15803d', textColor: '#ffffff' });
-        }
-    });
+    if (strazak.data_badan) {
+        eventList.push({ 
+            title: strazak.tytul_wpisu, 
+            start: strazak.data_badan, 
+            allDay: true, 
+            backgroundColor: '#16a34a', 
+            borderColor: '#15803d', 
+            textColor: '#ffffff' 
+        });
+    }
+});
 
     wydarzeniaData.forEach(function(wyd) {
         id: wyd.id,

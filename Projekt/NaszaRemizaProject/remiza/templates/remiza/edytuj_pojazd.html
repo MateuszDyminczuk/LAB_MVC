@@ -3,10 +3,54 @@
 {% block content %}
     <form method="post" class="search-form">
         {% csrf_token %}
-        {{ form.as_p }}
+        
+        <p>
+            <label for="{{ form.nazwa.id_for_label }}">Nazwa:</label>
+            <input type="text" name="nazwa" value="{{ form.nazwa.value|default:'' }}" class="form-control"
+                   {% if not request.user.is_superuser %}readonly style="background-color: #e9ecef; cursor: not-allowed;"{% endif %}>
+        </p>
+
+        <p>
+            <label for="{{ form.oznaczenie.id_for_label }}">Oznaczenie:</label>
+            <input type="text" name="oznaczenie" value="{{ form.oznaczenie.value|default:'' }}" class="form-control"
+                   {% if not request.user.is_superuser %}readonly style="background-color: #e9ecef; cursor: not-allowed;"{% endif %}>
+        </p>
+
+        <p>
+            <label for="{{ form.numer_operacyjny.id_for_label }}">Numer operacyjny:</label>
+            <input type="text" name="numer_operacyjny" value="{{ form.numer_operacyjny.value|default:'' }}" class="form-control"
+                   {% if not request.user.is_superuser %}readonly style="background-color: #e9ecef; cursor: not-allowed;"{% endif %}>
+        </p>
+
+        <p>
+            <label for="{{ form.data_przegladu.id_for_label }}">Data przeglądu:</label>
+            <input type="date" name="data_przegladu" value="{{ form.data_przegladu.value|date:'Y-m-d'|default:form.data_przegladu.value|default:'' }}" class="form-control"
+                   {% if not request.user.is_superuser %}readonly style="background-color: #e9ecef; cursor: not-allowed;"{% endif %}>
+        </p>
+
+        <p>
+            <label for="{{ form.data_oc.id_for_label }}">Data ubezpieczenia OC:</label>
+            <input type="date" name="data_oc" value="{{ form.data_oc.value|date:'Y-m-d'|default:form.data_oc.value|default:'' }}" class="form-control"
+                   {% if not request.user.is_superuser %}readonly style="background-color: #e9ecef; cursor: not-allowed;"{% endif %}>
+        </p>
+
+        <p style="display: flex; align-items: center; gap: 10px; margin-top: 15px; margin-bottom: 20px;">
+            <input type="checkbox" name="sprawny" id="{{ form.sprawny.id_for_label }}" 
+                   {% if form.sprawny.value %}checked{% endif %} 
+                   style="width: 20px; height: 20px; accent-color: #28a745; cursor: pointer;">
+            <label for="{{ form.sprawny.id_for_label }}" style="font-weight: 600; margin: 0; cursor: pointer;">Pojazd sprawny / gotowy do akcji</label>
+        </p>
+
+        <hr style="border: 0; border-top: 1px solid #eee; margin: 20px 0;">
+
         <button type="submit" class="search-btn" style="background-color: #28a745;">Zapisz zmiany</button>
+        
         {% if pojazd.pk %}
-        <a style="text-decoration: none;" href="{% url 'usun_pojazd' pojazd.pk %}" class="search-btn" onclick="return confirm('Czy na pewno chcesz usunąć ten pojazd?')" >Usuń</a>
+            {% if request.user.is_superuser %}
+                <a style="text-decoration: none;" href="{% url 'usun_pojazd' pojazd.pk %}" class="search-btn" onclick="return confirm('Czy na pewno chcesz usunąć ten pojazd?')" >Usuń</a>
+            {% else %}
+                <a style="text-decoration: none;" href="#" class="search-btn" onclick="alert('Nie masz uprawnień do usuwania pojazdów z podziału bojowego!'); return false;">Usuń</a>
+            {% endif %}
+        {% endif %}
     </form>
-        {%endif%}
 {% endblock %}

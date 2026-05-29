@@ -1,0 +1,47 @@
+{% extends 'remiza/base.html' %}
+
+{% block content %}
+<div style="font-family: 'Inter', sans-serif; max-width: 600px; margin: 20px auto; background: white; padding: 25px; border-radius: 12px; box-shadow: 0 4px 6px rgba(0,0,0,0.05);">
+    
+    <h2 style="color: #1e293b; border-bottom: 2px solid #ff4500; padding-bottom: 10px; margin-bottom: 20px;">
+        <i class="fas fa-user-shield" style="color: #ff4500;"></i> Profil Ratownika
+    </h2>
+
+    {% if strazak %}
+        <div style="margin-bottom: 25px; line-height: 1.6;">
+            <p><strong>Imię i Nazwisko:</strong> {{ strazak.imie }} {{ strazak.nazwisko }}</p>
+            <p><strong>Stopień:</strong> {{ strazak.get_stopien_display }}</p>
+            <p><strong>Badania lekarskie ważne do:</strong> {{ strazak.data_badan|date:"d.m.Y" }} 
+                <small style="color: #666;">(Zostało: {{ strazak.dni_do_badan }} dni)</small>
+            </p>
+        </div>
+
+        <h3 style="color: #1e293b; font-size: 1.1rem; margin-bottom: 10px;">Ukończone szkolenia:</h3>
+        <ul style="list-style: none; padding: 0;">
+            <li style="padding: 8px 0; border-bottom: 1px solid #eee;">
+                {% if strazak.kurs_podstawowy %}
+                    <i class="fas fa-check-circle" style="color: #2a9d8f;"></i> Kurs podstawowy OSP
+                {% else %}
+                    <i class="fas fa-times-circle" style="color: #e63946;"></i> Brak kursu podstawowego
+                {% endif %}
+            </li>
+            <li style="padding: 8px 0; border-bottom: 1px solid #eee;">
+                {% if strazak.kurs_dowodca %}
+                    <i class="fas fa-check-circle" style="color: #2a9d8f;"></i> Kurs dowódców OSP
+                {% else %}
+                    <i class="fas fa-times-circle" style="color: #e63946;"></i> Brak kursu dowódców
+                {% endif %}
+            </li>
+            <li style="padding: 8px 0;">
+                {% if strazak.waznosc_kpp and strazak.dni_do_kpp >= 0 %}
+                    <i class="fas fa-check-circle" style="color: #2a9d8f;"></i> Kurs KPP (Ważny do: {{ strazak.waznosc_kpp|date:"d.m.Y" }}, zostało {{ strazak.dni_do_kpp }} dni)
+                {% else %}
+                    <i class="fas fa-times-circle" style="color: #e63946;"></i> Kurs KPP (Nieważny lub brak)
+                {% endif %}
+            </li>
+        </ul>
+    {% else %}
+        <p style="color: #666;">To konto administratora nie jest powiązane z żadnym profilem strażaka.</p>
+    {% endif %}
+</div>
+{% endblock %}

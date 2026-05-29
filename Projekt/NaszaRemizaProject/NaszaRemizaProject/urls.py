@@ -14,9 +14,10 @@ Including another URLconf
     1. Import the include() function: from django.urls import include, path
     2. Add a URL to urlpatterns:  path('blog/', include('blog.urls'))
 """
+
 from remiza.admin import admin_site
 from django.urls import path
-from remiza.views import login_view
+from remiza.views import login_view, statystyki_dashboard
 from remiza.views import index_view
 from remiza.views import logout_view;
 from remiza.views import strazacy_lista;
@@ -34,6 +35,7 @@ from remiza.views import edytuj_akcje;
 from remiza.views import usun_akcje;
 from remiza.views import sprzet_lista, dodaj_sprzet, edytuj_sprzet, usun_sprzet
 from remiza.views import zapisz_wydarzenie, usun_wydarzenie;
+from remiza.views import moj_profil;
 
 urlpatterns = [
     path('admin/', admin_site.urls),
@@ -59,4 +61,6 @@ urlpatterns = [
     path('sprzet/<int:sprzet_id>/usun/', usun_sprzet, name='usun_sprzet'),
     path('wydarzenia/zapisz/', zapisz_wydarzenie, name='zapisz_wydarzenie'),
     path('wydarzenia/usun/', usun_wydarzenie, name='usun_wydarzenie'),
+    path('profil/', moj_profil, name='moj_profil'),
+    path('statystyki/', statystyki_dashboard, name='statystyki_dashboard'),
 ]

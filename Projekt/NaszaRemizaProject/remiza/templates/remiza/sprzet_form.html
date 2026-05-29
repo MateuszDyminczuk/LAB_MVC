@@ -22,4 +22,30 @@
         </div>
     </form>
 </div>
+
+<script>
+document.addEventListener('DOMContentLoaded', function() {
+    const checkboxSilnik = document.querySelector('#id_czy_silnikowy');
+    const poleMotogodzin = document.querySelector('#id_motogodziny');
+    
+    if (checkboxSilnik && poleMotogodzin) {
+        const kontenerMotogodzin = poleMotogodzin.closest('p');
+
+        function odswiezWidokMotogodzin() {
+            if (checkboxSilnik.checked) {
+                kontenerMotogodzin.style.display = 'block';
+            } else {
+                kontenerMotogodzin.style.display = 'none';
+                if (!poleMotogodzin.value) {
+                    poleMotogodzin.value = 0;
+                }
+            }
+        }
+
+        odswiezWidokMotogodzin();
+
+        checkboxSilnik.addEventListener('change', odswiezWidokMotogodzin);
+    }
+});
+</script>
 {% endblock %}

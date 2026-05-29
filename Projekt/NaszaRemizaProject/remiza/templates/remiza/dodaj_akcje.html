@@ -2,55 +2,133 @@
 
 {% block content %}
 <style>
-    /* Stylowanie całej listy jako siatki */
-    ul#id_pojazdy, ul#id_ratownicy {
+    .siatka-kafelkow {
         display: grid;
-        grid-template-columns: repeat(auto-fill, minmax(200px, 1fr));
-        gap: 10px;
+        grid-template-columns: repeat(auto-fill, minmax(240px, 1fr));
+        gap: 15px;
         padding: 0;
-        list-style-type: none; 
+        margin-bottom: 20px;
     }
 
-    
-    ul#id_pojazdy li, ul#id_ratownicy li {
+    .kafelek {
         background: #f8fafc;
         border: 1px solid #e2e8f0;
-        padding: 10px 14px;
-        border-radius: 8px;
+        padding: 14px;
+        border-radius: 10px;
         display: flex;
-        align-items: center;
-        gap: 10px;
-        cursor: pointer;
+        flex-direction: column;
+        gap: 8px;
+        box-shadow: 0 1px 3px rgba(0,0,0,0.05);
         transition: all 0.2s ease;
     }
 
-    
-    ul#id_pojazdy li:hover, ul#id_ratownicy li:hover {
-        background: #f1f5f9;
-        border-color: #cbd5e1;
+    /* Podświetlenie aktywnego kafelka */
+    .kafelek.zaznaczony {
+        background: #f0fdf4;
+        border-color: #28a745;
     }
 
-    
-    ul#id_pojazdy input[type="checkbox"], ul#id_ratownicy input[type="checkbox"] {
-        width: 18px;
-        height: 18px;
-        accent-color: #28a745; 
-        cursor: pointer;
+    .naglowek-kafelka {
+        display: flex;
+        align-items: center;
+        gap: 10px;
+        font-weight: 600;
+        color: #334155;
+    }
+
+    .kontener-licznika {
+        max-height: 0;
+        overflow: hidden;
+        transition: all 0.3s ease;
+        opacity: 0;
+    }
+
+    /* Płynne wysunięcie pola */
+    .kontener-licznika.pokaz {
+        max-height: 80px;
+        opacity: 1;
+        margin-top: 5px;
+    }
+
+    .pole-licznika {
+        width: 100%;
+        padding: 8px 12px;
+        border: 1px solid #cbd5e1;
+        border-radius: 6px;
+        font-size: 0.9rem;
+        background: #ffffff;
+    }
+
+    .pole-licznika:focus {
+        border-color: #28a745;
+        outline: none;
     }
 </style>
 
-<div style="max-width: 600px; margin: 40px auto; padding: 30px; background: #ffffff; border-radius: 16px; box-shadow: 0 4px 6px -1px rgba(0,0,0,0.1);">
+<div style="max-width: 700px; margin: 40px auto; padding: 30px; background: #ffffff; border-radius: 16px; box-shadow: 0 4px 6px -1px rgba(0,0,0,0.1);">
     
     <h2 style="font-family: 'Inter', sans-serif; font-weight: 700; color: #1e293b; margin-bottom: 24px; display: flex; align-items: center; gap: 10px;">
         <i class="fas fa-fire-extinguisher" style="color: #ff4500;"></i> Nowy raport z akcji
     </h2>
 
-    <form method="post" style="display: flex; flex-direction: column; gap: 20px;">
+    <form method="post" style="display: flex; flex-direction: column; gap: 10px;">
         {% csrf_token %}
         
-        {{ form.as_p }}
+        {% for field in form %}
+            {% if field.name != 'pojazdy' and field.name != 'ratownicy' %}
+                <p>
+                    <label style="font-weight: 600; color: #1e293b;">{{ field.label }}:</label><br>
+                    {{ field }}
+                </p>
+            {% endif %}
+        {% endfor %}
 
-        <div style="display: flex; gap: 12px; margin-top: 10px;">
+        <div style="margin-top: 15px; border-top: 1px solid #e2e8f0; padding-top: 15px;">
+            <label style="font-family: 'Inter', sans-serif; font-weight: 700; color: #1e293b; display: block; margin-bottom: 12px;">
+                🚒 Wybierz pojazdy, które wyjechały do akcji:
+            </label>
+            <div class="siatka-kafelkow">
+                {% for p in wszystkie_pojazdy %}
+                <div class="kafelek" id="kafelek-pojazd-{{ p.id }}">
+                    <div class="naglowek-kafelka">
+                        <input type="checkbox" name="pojazdy" value="{{ p.id }}" class="checkbox-dynamiczny" data-typ="pojazd" data-id="{{ p.id }}" style="width: 18px; height: 18px; accent-color: #28a745; cursor: pointer;">
+                        <span>{{ p.nazwa }}</span>
+                    </div>
+                    <div class="kontener-licznika" id="licznik-kontener-pojazd-{{ p.id }}">
+                        <input type="number" name="licznik_pojazd_{{ p.id }}" class="pole-licznika" placeholder="Ostatni stan: {{ p.przebieg }} km">
+                    </div>
+                </div>
+                {% endfor %}
+            </div>
+        </div>
+
+        <div style="margin-top: 15px; border-top: 1px solid #e2e8f0; padding-top: 15px;">
+            <label style="font-family: 'Inter', sans-serif; font-weight: 700; color: #1e293b; display: block; margin-bottom: 12px;">
+                🧑‍🚒 Obsada (Zaznacz strażaków biorących udział):
+            </label>
+            {{ form.ratownicy }}
+        </div>
+
+        <div style="margin-top: 15px; border-top: 1px solid #e2e8f0; padding-top: 15px; margin-bottom: 20px;">
+            <label style="font-family: 'Inter', sans-serif; font-weight: 700; color: #1e293b; display: block; margin-bottom: 12px;">
+                🧯 Użyty sprzęt silnikowy:
+            </label>
+            <div class="siatka-kafelkow">
+                {% for s in caly_sprzet %}
+                <div class="kafelek" id="kafelek-sprzet-{{ s.id }}">
+                    <div class="naglowek-kafelka">
+                        <input type="checkbox" class="checkbox-dynamiczny" data-typ="sprzet" data-id="{{ s.id }}" style="width: 18px; height: 18px; accent-color: #28a745; cursor: pointer;">
+                        <span>{{ s.nazwa }}</span>
+                    </div>
+                    <div class="kontener-licznika" id="licznik-kontener-sprzet-{{ s.id }}">
+                        <input type="number" step="0.1" name="mth_sprzet_{{ s.id }}" class="pole-licznika" placeholder="Ostatni stan: {{ s.motogodziny }} MTH">
+                    </div>
+                </div>
+                {% endfor %}
+            </div>
+        </div>
+
+        <div style="display: flex; gap: 12px; margin-top: 20px;">
             <button type="submit" style="background-color: #28a745; color: #ffffff; font-family: 'Inter', sans-serif; font-weight: 700; padding: 12px 24px; border-radius: 12px; border: none; cursor: pointer; display: flex; align-items: center; gap: 8px; flex: 1; justify-content: center;">
                 <i class="fas fa-plus"></i> Zapisz wyjazd
             </button>
@@ -61,4 +139,33 @@
         </div>
     </form>
 </div>
+
+<script>
+document.addEventListener('DOMContentLoaded', function() {
+    // Wspólny skrypt dla pojazdów i sprzętu
+    const checkboxes = document.querySelectorAll('.checkbox-dynamiczny');
+
+    checkboxes.forEach(function(checkbox) {
+        checkbox.addEventListener('change', function() {
+            const typ = this.getAttribute('data-typ'); // 'pojazd' lub 'sprzet'
+            const id = this.getAttribute('data-id');
+            
+            const kontenerLicznika = document.getElementById('licznik-kontener-' + typ + '-' + id);
+            const kafelek = document.getElementById('kafelek-' + typ + '-' + id);
+            const inputLicznik = kontenerLicznika.querySelector('.pole-licznika');
+
+            if (this.checked) {
+                kontenerLicznika.classList.add('pokaz');
+                kafelek.classList.add('zaznaczony');
+                inputLicznik.required = true;
+            } else {
+                kontenerLicznika.classList.remove('pokaz');
+                kafelek.classList.remove('zaznaczony');
+                inputLicznik.required = false;
+                inputLicznik.value = '';
+            }
+        });
+    });
+});
+</script>
 {% endblock %}
